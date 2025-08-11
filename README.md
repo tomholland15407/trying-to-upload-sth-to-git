@@ -1,4 +1,4 @@
-# Im just trying to have some fun with my vietnamese little sister
+# Im just trying to have some fun with my little sister
 
 character_name = input("Ten cua ban la gi? ")
 if character_name == "Hung":
