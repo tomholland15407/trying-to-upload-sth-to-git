@@ -1,4 +1,4 @@
-# Im just trying to have some fun with my little sister
+# Just to show that i know about README, otherwise identical to app.py
 
 character_name = input("Ten cua ban la gi? ")
 if character_name == "Hung":
