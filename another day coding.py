@@ -7,7 +7,7 @@ names = []
 
 while True:
     name = input('Một nơi bạn muốn đến là: ')
-    if name.lower() == 'xong':
+    if name.lower().strip() == 'xong':
         break
     elif len(name.strip()) == 0:
         print('Hình như đây không phải là một điểm đến.')
