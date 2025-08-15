@@ -1,8 +1,8 @@
 name = input("Em be cua ban ten la gi? ")
 length = len(name)
-if length >= 12:
+if length >= 15:
     gender = "con gai"
-elif length <= 12:
+elif length <= 15:
     gender = "con trai"
 else:
     gender = "con trai"
