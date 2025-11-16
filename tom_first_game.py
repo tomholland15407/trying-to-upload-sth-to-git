@@ -7,8 +7,6 @@ HEIGHT = 800
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('Draw your own galaxy')
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
 
 YELLOW = (255,255,0)
 BLUE = (0,0,255)
@@ -29,13 +27,13 @@ class Planet:
         self.x = x
         self.y = y
         self.color = (
-            random.randint(100, 200)
-            , random.randint(100, 200)
-            , random.randint(100, 200)
+            random.randint(0, 255)
+            , random.randint(0, 255)
+            , random.randint(0, 255)
         )
         self.max_radius = random.randint(20, 70)
         self.current_radius = 0
-        self.growth_rate = random.uniform(0.5, 1.5)
+        self.growth_rate = random.uniform(5.0, 40.0)
     def grow(self):
         if self.current_radius < self.max_radius:
             self.current_radius += self.growth_rate
@@ -63,7 +61,7 @@ while running:
         planet.draw(screen)
 
     pygame.display.flip()
-    speed.tick(23)
+    speed.tick(17)
 
 pygame.quit()
 
