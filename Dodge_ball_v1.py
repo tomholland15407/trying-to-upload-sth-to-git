@@ -89,7 +89,7 @@ def scoreboard(score):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 running1 = False
 
         text1 = font1.render(f'Your money: {score}$.', True, WHITE)
