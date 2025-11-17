@@ -1,10 +1,9 @@
-def hanoi(n, source, target, helper):
+def hanoi(n,a,b,c):
     if n == 1:
-        print(f"Move disc 1 from {source} to {target}")
+        print(f'move 1 from {a} to {b}')
     else:
-        hanoi(n - 1, source, helper, target)
-        print(f"Move disc {n} from {source} to {target}")
-        hanoi(n - 1, helper, target, source)
-
-# Move from A to B using C as helper
-hanoi(3, 'A', 'B', 'C')
+        hanoi(n - 1, a, c, b)
+        print(f'move {n} from {a} to {b}')
+        hanoi(n - 1, c, b, a)
+n = int(input('enter the number of discs: '))
+hanoi(n, 'a', 'b', 'c')

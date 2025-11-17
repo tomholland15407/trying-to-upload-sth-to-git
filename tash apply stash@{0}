@@ -1,0 +1,870 @@
+[1mdiff --git a/6174.py b/6174.py[m
+[1mindex e69de29..9ecc0b8 100644[m
+[1m--- a/6174.py[m
+[1m+++ b/6174.py[m
+[36m@@ -0,0 +1,19 @@[m
+[32m+[m[32mt = list(str(input()))[m
+[32m+[m[32mr = True[m
+[32m+[m[32mk = 1[m
+[32m+[m[32mwhile r:[m
+[32m+[m[32m    while len(t) < 4:[m
+[32m+[m[32m        t.append("0")[m
+[32m+[m[32m    t1 = ''.join(sorted(t))[m
+[32m+[m[32m    t2 = ''.join(sorted(t, reverse=True))[m
+[32m+[m[32m    e = int(t2) - int(t1)[m
+[32m+[m[32m    if e == 6174:[m
+[32m+[m[32m        print('6174, ok', k)[m
+[32m+[m[32m        r = False[m
+[32m+[m[32m    elif e == 0:[m
+[32m+[m[32m        print('not ok')[m
+[32m+[m[32m        r = False[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        print(e)[m
+[32m+[m[32m        k = k + 1[m
+[32m+[m[32m        t = list(str(e))[m
+\ No newline at end of file[m
+[1mdiff --git a/Dodge_ball_v2.py b/Dodge_ball_v2.py[m
+[1mindex e69de29..9f6ed64 100644[m
+[1m--- a/Dodge_ball_v2.py[m
+[1m+++ b/Dodge_ball_v2.py[m
+[36m@@ -0,0 +1,183 @@[m
+[32m+[m[32m#Add a short intro like this[m
+[32m+[m[32m# "Year 2125."[m
+[32m+[m[32m  #  "Climate change has ravaged the planet.",[m
+[32m+[m[32m   # "Toxic waste rains from the sky — a deadly storm of pollution.",[m
+[32m+[m[32m    #"But humanity still craves one thing: pizza.",[m
+[32m+[m[32m    #"You are the last delivery driver.",[m
+[32m+[m[32m    #"Your mission: dodge the toxic balls and deliver hope... one slice at a time."[m
+[32m+[m
+[32m+[m[32mimport pygame[m
+[32m+[m[32mimport random[m
+[32m+[m[32mimport time[m
+[32m+[m
+[32m+[m[32mpygame.init()[m
+[32m+[m
+[32m+[m[32mWIDTH, HEIGHT = 600, 700[m
+[32m+[m
+[32m+[m[32mscreen = pygame.display.set_mode((WIDTH, HEIGHT))[m
+[32m+[m[32mpygame.display.set_caption('Dodge Ball')[m
+[32m+[m[32mstart_loop = False[m
+[32m+[m[32mtime_start = 0[m
+[32m+[m[32mtime_last = 1500[m
+[32m+[m
+[32m+[m[32mBLACK = (0, 0, 0)[m
+[32m+[m[32mWHITE = (255, 255, 255)[m
+[32m+[m[32mCOLOR = (100, 100, 200)[m
+[32m+[m[32mYELLOW = (255, 255, 0)[m
+[32m+[m[32mBROWN = (55, 55, 55)[m
+[32m+[m[32mBLUE = (0, 0, 150)[m
+[32m+[m[32mGREY = (100, 100, 100)[m
+[32m+[m[32mRED = (150, 0, 0)[m
+[32m+[m[32mRANDOM = (random.randint(100, 200), random.randint(100, 200), random.randint(100, 200))[m
+[32m+[m[32mclock = pygame.time.Clock()[m
+[32m+[m
+[32m+[m[32mfont = pygame.font.SysFont('Arial', 40)[m
+[32m+[m[32mfont1 = pygame.font.SysFont('Arial', 60)[m
+[32m+[m
+[32m+[m[32mgood = ['GOOD', 'AMAZING', 'BEAUTIFUL', 'FANTASTIC', 'WELL DONE', 'BRILLIANT', 'SO COOL', 'LOVELY', 'GOOD JOB', 'EXCELLENT', 'SUPER', 'RIZZ', 'RIZZ MASTER', 'ULTIMATE RIZZ MASTER', '5 STAR', 'LET HIM COOK', 'BREEZE', 'SWEET'][m
+[32m+[m[32mstory_line = ["Year 2125.",[m
+[32m+[m[32m              "Climate change has ravaged the planet.",[m
+[32m+[m[32m            "Toxic waste rains from the sky.",[m
+[32m+[m[32m            "But humanity still craves one thing: pizza.",[m
+[32m+[m[32m            "You are the last delivery driver.",[m
+[32m+[m[32m            "Your mission: dodge the toxic balls and deliver hope"[m
+[32m+[m[32m              "... one slice at a time."][m
+[32m+[m
+[32m+[m[32mdef generate_color():[m
+[32m+[m[32m    colors = [][m
+[32m+[m[32m    r = random.randint(100, 200)[m
+[32m+[m[32m    g = random.randint(100, 200)[m
+[32m+[m[32m    b = random.randint(100, 200)[m
+[32m+[m[32m    colors = [r, g, b][m
+[32m+[m[32m    return colors[m
+[32m+[m[32mmain_colors = generate_color()[m
+[32m+[m
+[32m+[m[32mcompliment = ['hello'][m
+[32m+[m
+[32m+[m[32mdef draw_ball(x, y):[m
+[32m+[m[32m    pygame.draw.circle(screen, main_colors, (x, y), 50)[m
+[32m+[m
+[32m+[m
+[32m+[m[32mdef draw_car(x, y):[m
+[32m+[m[32m    pygame.draw.rect(screen, RED, (x, y, 30, 30))[m
+[32m+[m
+[32m+[m[32mdef game_loop():[m
+[32m+[m[32m    by = 0[m
+[32m+[m[32m    bx = WIDTH / 2[m
+[32m+[m[32m    cx = 0[m
+[32m+[m[32m    cy = HEIGHT - 30[m
+[32m+[m[32m    plus = 2[m
+[32m+[m[32m    score = 0[m
+[32m+[m[32m    cplus = 5[m
+[32m+[m[32m    cminus = 30[m
+[32m+[m[32m    start_loop = False[m
+[32m+[m[32m    time_start = 0[m
+[32m+[m[32m    time_last = 5000[m
+[32m+[m[32m    start_loop_2 = False[m
+[32m+[m[32m    time_start_2 = pygame.time.get_ticks()[m
+[32m+[m[32m    time_last_2 = 4100[m
+[32m+[m[32m    tx = WIDTH[m
+[32m+[m[32m    running = True[m
+[32m+[m
+[32m+[m[32m    while running:[m
+[32m+[m[32m        screen.fill(WHITE)[m
+[32m+[m[32m        start_loop_2 = True[m
+[32m+[m[32m        if start_loop_2:[m
+[32m+[m[32m            current_time_2 = pygame.time.get_ticks()[m
+[32m+[m[32m            if current_time_2 - time_start_2 < time_last_2:[m
+[32m+[m[32m                text3 = font.render('SPACE to dodge the ball', True, GREY)[m
+[32m+[m[32m                screen.blit(text3, (WIDTH/2-text3.get_width()/2, HEIGHT/2-text3.get_height()/2-30))[m
+[32m+[m[32m                text4 = font.render('Go full path to score', True, GREY)[m
+[32m+[m[32m                screen.blit(text4, (WIDTH/2-text4.get_width()/2, HEIGHT/2-text3.get_height()/2+30))[m
+[32m+[m[32m            else:[m
+[32m+[m[32m                start_loop_2 = False[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        for event in pygame.event.get():[m
+[32m+[m[32m            if event.type == pygame.QUIT:[m
+[32m+[m[32m                running = False[m
+[32m+[m[32m            elif event.type == pygame.MOUSEBUTTONDOWN and cx > 0:[m
+[32m+[m[32m                cx -= cminus[m
+[32m+[m[32m            elif event.type == pygame.KEYDOWN and cx > 0 and event.key == pygame.K_SPACE:[m
+[32m+[m[32m                cx -= cminus[m
+[32m+[m
+[32m+[m[32m        if by < HEIGHT:[m
+[32m+[m[32m            by += plus[m
+[32m+[m
+[32m+[m[32m        else:[m
+[32m+[m[32m            by = 0[m
+[32m+[m[32m            bx = random.randint(100, WIDTH - 100)[m
+[32m+[m[32m            main_colors[0] = random.randint(100, 200)[m
+[32m+[m[32m            main_colors[1] = random.randint(100, 200)[m
+[32m+[m[32m            main_colors[2] = random.randint(100, 200)[m
+[32m+[m[32m        if cx < WIDTH:[m
+[32m+[m[32m            cx += cplus[m
+[32m+[m
+[32m+[m[32m        else:[m
+[32m+[m[32m            score += 10[m
+[32m+[m[32m            plus += 2[m
+[32m+[m[32m            cplus += 1[m
+[32m+[m[32m            cx = 0[m
+[32m+[m[32m            cminus += 10[m
+[32m+[m[32m            start_loop = True[m
+[32m+[m[32m            time_start = pygame.time.get_ticks()[m
+[32m+[m[32m            compliment[0] = good[random.randint(0, len(good)-1)][m
+[32m+[m[32m        if start_loop:[m
+[32m+[m[32m            current_time = pygame.time.get_ticks()[m
+[32m+[m[32m            if current_time - time_start < time_last:[m
+[32m+[m[32m                text2 = font.render(*compliment, True, BROWN)[m
+[32m+[m[32m                screen.blit(text2, (tx,100))[m
+[32m+[m[32m                if (0-text2.get_width()) < tx <= WIDTH:[m
+[32m+[m[32m                    tx -= 5[m
+[32m+[m[32m                else:[m
+[32m+[m[32m                    tx = WIDTH[m
+[32m+[m
+[32m+[m[32m            else:[m
+[32m+[m[32m                start_loop = False[m
+[32m+[m
+[32m+[m[32m        if abs(bx - (cx + 15)) < 55 and abs(by - (cy + 15)) < 55:[m
+[32m+[m[32m            running = False[m
+[32m+[m
+[32m+[m[32m        text = font.render(f'Total score: {score}', True, COLOR)[m
+[32m+[m
+[32m+[m[32m        screen.blit(text, (WIDTH/2 - text.get_width()/2, 50))[m
+[32m+[m
+[32m+[m[32m        pygame.draw.line(screen, BLUE, (0, HEIGHT-5), (WIDTH, HEIGHT-5), 10)[m
+[32m+[m
+[32m+[m[32m        draw_ball(bx, by)[m
+[32m+[m[32m        draw_car(cx, cy)[m
+[32m+[m[32m        pygame.display.flip()[m
+[32m+[m[32m        clock.tick(50)[m
+[32m+[m[32m    return score[m
+[32m+[m
+[32m+[m[32mdef scoreboard(score):[m
+[32m+[m[32m    running1 = True[m
+[32m+[m[32m    score *= 10[m
+[32m+[m[32m    while running1:[m
+[32m+[m[32m        screen.fill(BLACK)[m
+[32m+[m
+[32m+[m[32m        for event in pygame.event.get():[m
+[32m+[m[32m            if event.type == pygame.QUIT:[m
+[32m+[m[32m                pygame.quit()[m
+[32m+[m[32m                exit()[m
+[32m+[m[32m            elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:[m
+[32m+[m[32m                running1 = False[m
+[32m+[m
+[32m+[m[32m        text1 = font1.render(f'You earned {score}$', True, WHITE)[m
+[32m+[m[32m        text2 = font.render(f'Click HERE or SPACE to play again', True, WHITE)[m
+[32m+[m
+[32m+[m[32m        screen.blit(text1, (WIDTH/2 - text1.get_width()/2, HEIGHT/2 - text1.get_height()/2 - 50))[m
+[32m+[m[32m        screen.blit(text2, (WIDTH/2 - text2.get_width()/2, HEIGHT/2 - text1.get_height()/2 + 50))[m
+[32m+[m[32m        pygame.display.flip()[m
+[32m+[m[32m        clock.tick(50)[m
+[32m+[m[32mdef story():[m
+[32m+[m[32m    running = True[m
+[32m+[m[32m    while running:[m
+[32m+[m[32m        screen.fill(BLACK)[m
+[32m+[m
+[32m+[m
+[32m+[m[32mk = 0[m
+[32m+[m[32mwhile True:[m
+[32m+[m[32m    star = game_loop()[m
+[32m+[m[32m    time.sleep(0.5)[m
+[32m+[m[32m    scoreboard(star)[m
+[1mdiff --git a/binary.py b/binary.py[m
+[1mindex e69de29..51a9655 100644[m
+[1m--- a/binary.py[m
+[1m+++ b/binary.py[m
+[36m@@ -0,0 +1,6 @@[m
+[32m+[m[32mdef binary(n):[m
+[32m+[m[32m    if n == 0:[m
+[32m+[m[32m        return ''[m
+[32m+[m[32m    return binary(n//2) + str(n%2)[m
+[32m+[m[32mn = int(input('enter the number: '))[m
+[32m+[m[32mprint(binary(n))[m
+\ No newline at end of file[m
+[1mdiff --git a/camel_case.py b/camel_case.py[m
+[1mindex e69de29..3210527 100644[m
+[1m--- a/camel_case.py[m
+[1m+++ b/camel_case.py[m
+[36m@@ -0,0 +1,3 @@[m
+[32m+[m[32m# In some programming languages, variables are named using the CamelCase convention (e.g., ArrayOfNumber),[m
+[32m+[m[32m# while in others (including Python), variables are named using the snake_case convention (e.g., array_of_number).[m
+[32m+[m[32m#Write a program that converts a string from snake_case to CamelCase.[m
+\ No newline at end of file[m
+[1mdiff --git a/checking.py b/checking.py[m
+[1mindex e69de29..ab1c953 100644[m
+[1m--- a/checking.py[m
+[1m+++ b/checking.py[m
+[36m@@ -0,0 +1,2 @@[m
+[32m+[m[32mif 'ab' == 'AB':[m
+[32m+[m[32m    print(1)[m
+\ No newline at end of file[m
+[1mdiff --git a/class101.py b/class101.py[m
+[1mindex e69de29..a55b7c9 100644[m
+[1m--- a/class101.py[m
+[1m+++ b/class101.py[m
+[36m@@ -0,0 +1,36 @@[m
+[32m+[m[32mimport pygame[m
+[32m+[m[32mimport time[m
+[32m+[m
+[32m+[m[32mpygame.init()[m
+[32m+[m[32mscreen = pygame.display.set_mode((800, 600))[m
+[32m+[m[32mclock = pygame.time.Clock()[m
+[32m+[m
+[32m+[m[32mrunning = True[m
+[32m+[m[32mstart_tiny_loop = False[m
+[32m+[m[32mtiny_loop_start_time = 0[m
+[32m+[m[32mtiny_loop_duration = 2000  # milliseconds (2 seconds)[m
+[32m+[m
+[32m+[m[32mwhile running:[m
+[32m+[m[32m    for event in pygame.event.get():[m
+[32m+[m[32m        if event.type == pygame.QUIT:[m
+[32m+[m[32m            running = False[m
+[32m+[m
+[32m+[m[32m        # Trigger the tiny loop[m
+[32m+[m[32m        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:[m
+[32m+[m[32m            start_tiny_loop = True[m
+[32m+[m[32m            tiny_loop_start_time = pygame.time.get_ticks()[m
+[32m+[m
+[32m+[m[32m    # Main game logic here...[m
+[32m+[m
+[32m+[m[32m    # Run tiny loop for a specific duration[m
+[32m+[m[32m    if start_tiny_loop:[m
+[32m+[m[32m        current_time = pygame.time.get_ticks()[m
+[32m+[m[32m        if current_time - tiny_loop_start_time < tiny_loop_duration:[m
+[32m+[m[32m            # This is your "tiny loop"[m
+[32m+[m[32m            print("Tiny loop running...")[m
+[32m+[m[32m            # You can do animations, spawn effects, etc.[m
+[32m+[m[32m        else:[m
+[32m+[m[32m            start_tiny_loop = False  # Stop the tiny loop[m
+[32m+[m
+[32m+[m[32m    pygame.display.flip()[m
+[32m+[m[32m    clock.tick(60)[m
+\ No newline at end of file[m
+[1mdiff --git a/class102.py b/class102.py[m
+[1mindex e69de29..44be7c1 100644[m
+[1m--- a/class102.py[m
+[1m+++ b/class102.py[m
+[36m@@ -0,0 +1,2 @@[m
+[32m+[m[32ml = list('heeloo  sssd  dd 123...')[m
+[32m+[m[32mprint(l)[m
+\ No newline at end of file[m
+[1mdiff --git a/combination_recursive.py b/combination_recursive.py[m
+[1mindex e69de29..a72995a 100644[m
+[1m--- a/combination_recursive.py[m
+[1m+++ b/combination_recursive.py[m
+[36m@@ -0,0 +1,6 @@[m
+[32m+[m[32mdef c(m,n):[m
+[32m+[m[32m    if n == 0 or n == m:[m
+[32m+[m[32m        return 1[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        return c(m-1,n-1) + c(m-1,n)[m
+[32m+[m[32mprint(c(10,3))[m
+\ No newline at end of file[m
+[1mdiff --git a/experiement.py b/experiement.py[m
+[1mindex e69de29..ce7ac58 100644[m
+[1m--- a/experiement.py[m
+[1m+++ b/experiement.py[m
+[36m@@ -0,0 +1,14 @@[m
+[32m+[m[32mdef compress(s):[m
+[32m+[m[32m    result = ''[m
+[32m+[m[32m    i = 0[m
+[32m+[m[32m    while i < len(s):[m
+[32m+[m[32m        count = 1[m
+[32m+[m[32m        while i < (len(s)-1) and s[i] == s[i+1]:[m
+[32m+[m[32m            count += 1[m
+[32m+[m[32m            i += 1[m
+[32m+[m[32m        result += s[i] + str(count)[m
+[32m+[m[32m        i += 1[m
+[32m+[m[32m    return result[m
+[32m+[m[32ms = input()[m
+[32m+[m[32md = compress(s)[m
+[32m+[m[32mprint(d)[m
+\ No newline at end of file[m
+[1mdiff --git a/fact.py b/fact.py[m
+[1mindex e69de29..e397b86 100644[m
+[1m--- a/fact.py[m
+[1m+++ b/fact.py[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mdef fact(n):[m
+[32m+[m[32m    if n == 0:[m
+[32m+[m[32m        return 1[m
+[32m+[m[32m    return n * fact(n - 1)[m
+\ No newline at end of file[m
+[1mdiff --git a/fibonacci.py b/fibonacci.py[m
+[1mindex e69de29..cb38178 100644[m
+[1m--- a/fibonacci.py[m
+[1m+++ b/fibonacci.py[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32mdef fibo(n):[m
+[32m+[m[32m    if n == 1:[m
+[32m+[m[32m        return 1[m
+[32m+[m[32m    elif n == 2:[m
+[32m+[m[32m        return 1[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        return fibo(n-1) + fibo(n-2)[m
+[32m+[m[32mn = int(input('enter number: '))[m
+[32m+[m[32mprint(fibo(n))[m
+\ No newline at end of file[m
+[1mdiff --git a/first_last_two.py b/first_last_two.py[m
+[1mindex e69de29..b4d44bd 100644[m
+[1m--- a/first_last_two.py[m
+[1m+++ b/first_last_two.py[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32ms=input().strip()[m
+[32m+[m[32mif len(s)<2:[m
+[32m+[m[32m    print("empty")[m
+[32m+[m[32melse:[m
+[32m+[m[32m    print(s[:2] + s[-2:])[m
+\ No newline at end of file[m
+[1mdiff --git a/first_symbol.py b/first_symbol.py[m
+[1mindex e69de29..45e3b83 100644[m
+[1m--- a/first_symbol.py[m
+[1m+++ b/first_symbol.py[m
+[36m@@ -0,0 +1,8 @@[m
+[32m+[m[32mn = list(input('enter a string: '))[m
+[32m+[m[32mt = n[0][m
+[32m+[m[32mfor i,s in enumerate(n):[m
+[32m+[m[32m    if s == t:[m
+[32m+[m[32m        n[i] = '$'[m
+[32m+[m[32mprint(''.join(n))[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/hanoi_super_complex.py b/hanoi_super_complex.py[m
+[1mindex fad2751..8d809bf 100644[m
+[1m--- a/hanoi_super_complex.py[m
+[1m+++ b/hanoi_super_complex.py[m
+[36m@@ -1,10 +1,9 @@[m
+[31m-def hanoi(n, source, target, helper):[m
+[32m+[m[32mdef hanoi(n,a,b,c):[m
+     if n == 1:[m
+[31m-        print(f"Move disc 1 from {source} to {target}")[m
+[32m+[m[32m        print(f'move 1 from {a} to {b}')[m
+     else:[m
+[31m-        hanoi(n - 1, source, helper, target)[m
+[31m-        print(f"Move disc {n} from {source} to {target}")[m
+[31m-        hanoi(n - 1, helper, target, source)[m
+[31m-[m
+[31m-# Move from A to B using C as helper[m
+[31m-hanoi(3, 'A', 'B', 'C')[m
+\ No newline at end of file[m
+[32m+[m[32m        hanoi(n - 1, a, c, b)[m
+[32m+[m[32m        print(f'move {n} from {a} to {b}')[m
+[32m+[m[32m        hanoi(n - 1, c, b, a)[m
+[32m+[m[32mn = int(input('enter the number of discs: '))[m
+[32m+[m[32mhanoi(n, 'a', 'b', 'c')[m
+\ No newline at end of file[m
+[1mdiff --git a/input_function.py b/input_function.py[m
+[1mindex e69de29..5291305 100644[m
+[1m--- a/input_function.py[m
+[1m+++ b/input_function.py[m
+[36m@@ -0,0 +1,13 @@[m
+[32m+[m[32mdef factorial(n):[m
+[32m+[m[32m    if n == 0:[m
+[32m+[m[32m        return 1[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        return n * factorial(n - 1)[m
+[32m+[m[32mdef c(n, r):[m
+[32m+[m[32m    return factorial(n) / (factorial(r) * factorial(n - r))[m
+[32m+[m[32ma=10[m
+[32m+[m
+[32m+[m[32mfor i in range(0, a):[m
+[32m+[m[32m    for t in range(0, i+1):[m
+[32m+[m[32m        print(c(a, t), end=' ')[m
+[32m+[m[32m    print("\n")[m
+\ No newline at end of file[m
+[1mdiff --git a/integer partition.py b/integer partition.py[m
+[1mindex e69de29..be500fa 100644[m
+[1m--- a/integer partition.py[m	
+[1m+++ b/integer partition.py[m	
+[36m@@ -0,0 +1,22 @@[m
+[32m+[m[32mdef generate_partitions(n, max_num=None):[m
+[32m+[m[32m    if max_num is None:[m
+[32m+[m[32m        max_num = n[m
+[32m+[m[32m    if n == 0:[m
+[32m+[m[32m        return [[]][m
+[32m+[m[32m    if n < 0 or max_num == 0:[m
+[32m+[m[32m        return [][m
+[32m+[m
+[32m+[m[32m    # Partitions that include max_num[m
+[32m+[m[32m    with_max = generate_partitions(n - max_num, max_num)[m
+[32m+[m[32m    with_max = [[max_num] + part for part in with_max][m
+[32m+[m
+[32m+[m[32m    # Partitions that exclude max_num[m
+[32m+[m[32m    without_max = generate_partitions(n, max_num - 1)[m
+[32m+[m
+[32m+[m[32m    return with_max + without_max[m
+[32m+[m
+[32m+[m
+[32m+[m[32m# Example usage[m
+[32m+[m[32mpartitions = generate_partitions(2)[m
+[32m+[m[32mfor p in partitions:[m
+[32m+[m[32m    print(p)[m
+\ No newline at end of file[m
+[1mdiff --git a/lambda_recursive.py b/lambda_recursive.py[m
+[1mindex c398966..125efc2 100644[m
+[1m--- a/lambda_recursive.py[m
+[1m+++ b/lambda_recursive.py[m
+[36m@@ -1,2 +1 @@[m
+[31m-l = [1,2,4][m
+[31m-print(l.index(4))[m
+\ No newline at end of file[m
+[32m+[m[32mgcd = lambda a,b: a if b == 0 else gcd(b,a%b)[m
+\ No newline at end of file[m
+[1mdiff --git a/math_import.py b/math_import.py[m
+[1mindex e69de29..ae49e47 100644[m
+[1m--- a/math_import.py[m
+[1m+++ b/math_import.py[m
+[36m@@ -0,0 +1,19 @@[m
+[32m+[m[32mimport math[m
+[32m+[m[32mt = list(map(int,input("Enter some numbers: ").split()))[m
+[32m+[m
+[32m+[m[32mdef f(x):[m
+[32m+[m[32m    if x < 0:[m
+[32m+[m[32m        a = x**2*4.5[m
+[32m+[m[32m        b = x**3-1[m
+[32m+[m[32m        return math.cos(a) + 5*math.sin(b)[m
+[32m+[m[32m    if x == 0:[m
+[32m+[m[32m        return 7[m
+[32m+[m[32m    if x > 0:[m
+[32m+[m[32m        return math.log(x, 2) + (x**2+5)**(1/2)[m
+[32m+[m
+[32m+[m[32mprint(f'{'x':>10} {'f(x)':>10}')[m
+[32m+[m[32mprint('-'*30)[m
+[32m+[m
+[32m+[m[32mfor x in t:[m
+[32m+[m[32m    y = f(x)[m
+[32m+[m[32m    print(f'{x:>10} {y:>10.2f}')[m
+\ No newline at end of file[m
+[1mdiff --git a/morse.py b/morse.py[m
+[1mindex e69de29..db78812 100644[m
+[1m--- a/morse.py[m
+[1m+++ b/morse.py[m
+[36m@@ -0,0 +1,64 @@[m
+[32m+[m[32mimport pygame[m
+[32m+[m[32mimport time[m
+[32m+[m
+[32m+[m[32mMORSE_DICT = {[m
+[32m+[m[32m    '·–': 'A', '–···': 'B', '–·–·': 'C', '–··': 'D', '·': 'E',[m
+[32m+[m[32m    '··–·': 'F', '––·': 'G', '····': 'H', '··': 'I', '·–––': 'J',[m
+[32m+[m[32m    '–·–': 'K', '·–··': 'L', '––': 'M', '–·': 'N', '–––': 'O',[m
+[32m+[m[32m    '·––·': 'P', '––·–': 'Q', '·–·': 'R', '···': 'S', '–': 'T',[m
+[32m+[m[32m    '··–': 'U', '···–': 'V', '·––': 'W', '–··–': 'X', '–·––': 'Y', '––··': 'Z',[m
+[32m+[m[32m    '–––––': '0', '·––––': '1', '··–––': '2', '···––': '3', '····–': '4',[m
+[32m+[m[32m    '·····': '5', '–····': '6', '––···': '7', '–––··': '8', '––––·': '9'[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mpygame.init()[m
+[32m+[m[32mscreen = pygame.display.set_mode((1300,600))[m
+[32m+[m[32mpygame.display.set_caption('morse it2000')[m
+[32m+[m[32mfont = pygame.font.SysFont(None, 48)[m
+[32m+[m
+[32m+[m[32mWHITE = (255, 255, 255)[m
+[32m+[m[32mBLACK = (0, 0, 0)[m
+[32m+[m
+[32m+[m[32mmorse_sequence = ""[m
+[32m+[m[32mtranslated_text = ""[m
+[32m+[m[32mcurrent_letter = ""[m
+[32m+[m[32mthreshold = 0.3[m
+[32m+[m[32mletter_pause = 1.5[m
+[32m+[m
+[32m+[m[32mrunning = True[m
+[32m+[m[32mspace_pressed_time = None[m
+[32m+[m[32mlast_input_time = time.time()[m
+[32m+[m
+[32m+[m[32mwhile running:[m
+[32m+[m[32m    screen.fill(WHITE)[m
+[32m+[m
+[32m+[m[32m    for event in pygame.event.get():[m
+[32m+[m[32m        if event.type == pygame.QUIT:[m
+[32m+[m[32m            running = False[m
+[32m+[m
+[32m+[m[32m        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:[m
+[32m+[m[32m            space_pressed_time = time.time()[m
+[32m+[m
+[32m+[m[32m        elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:[m
+[32m+[m[32m            if space_pressed_time:[m
+[32m+[m[32m                duration = time.time() - space_pressed_time[m
+[32m+[m[32m                symbol = '·' if duration < threshold else '–'[m
+[32m+[m[32m                current_letter += symbol[m
+[32m+[m[32m                morse_sequence += symbol + '   '[m
+[32m+[m[32m                space_pressed_time = None[m
+[32m+[m[32m                last_input_time = time.time()[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    if current_letter and (time.time() - last_input_time > letter_pause):[m
+[32m+[m[32m        translated_char = MORSE_DICT.get(current_letter, '?')[m
+[32m+[m[32m        translated_text += translated_char[m
+[32m+[m[32m        current_letter = ""[m
+[32m+[m[32m        morse_sequence += '       '[m
+[32m+[m
+[32m+[m[32m    morse_text = font.render(morse_sequence, True, BLACK)[m
+[32m+[m[32m    translated = font.render("Translation: " + translated_text, True, BLACK)[m
+[32m+[m[32m    screen.blit(morse_text, (20, 80))[m
+[32m+[m[32m    screen.blit(translated, (20, 150))[m
+[32m+[m[32m    pygame.display.flip()[m
+[32m+[m
+[32m+[m[32mpygame.quit()[m
+\ No newline at end of file[m
+[1mdiff --git a/pascal triangle.py b/pascal triangle.py[m
+[1mindex e69de29..c84e91d 100644[m
+[1m--- a/pascal triangle.py[m	
+[1m+++ b/pascal triangle.py[m	
+[36m@@ -0,0 +1,14 @@[m
+[32m+[m[32mdef fact(n):[m
+[32m+[m[32m    if n == 0:[m
+[32m+[m[32m        return 1[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        return n * fact(n-1)[m
+[32m+[m[32mdef combination(a,b):[m
+[32m+[m[32m    return fact(a)//(fact(a-b)*fact(b))[m
+[32m+[m[32mn = int(input('enter a number: '))[m
+[32m+[m[32mfor i in range(n):[m
+[32m+[m[32m    print('  '*(n-i), end='')[m
+[32m+[m[32m    for j in range(i+1):[m
+[32m+[m[32m        t = combination(i,j)[m
+[32m+[m[32m        print(f'{t:3}', end=' ')[m
+[32m+[m[32m    print()[m
+\ No newline at end of file[m
+[1mdiff --git a/password.py b/password.py[m
+[1mindex e69de29..3fbeb9c 100644[m
+[1m--- a/password.py[m
+[1m+++ b/password.py[m
+[36m@@ -0,0 +1,20 @@[m
+[32m+[m[32mpassword = input("Enter a password: ")[m
+[32m+[m
+[32m+[m[32mif len(password) < 8:[m
+[32m+[m[32m    print("Too short")[m
+[32m+[m[32melse:[m
+[32m+[m[32m    has_upper = any(c.isupper() for c in password)[m
+[32m+[m[32m    has_lower = any(c.islower() for c in password)[m
+[32m+[m[32m    has_digit = any(c.isdigit() for c in password)[m
+[32m+[m[32m    has_special = any(c in '!@#$%^&*' for c in password)[m
+[32m+[m[32m    if has_upper and has_lower and has_digit and has_special:[m
+[32m+[m[32m        print("Yes")[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        if not has_upper:[m
+[32m+[m[32m            print('upper')[m
+[32m+[m[32m        if not has_lower:[m
+[32m+[m[32m            print('lower')[m
+[32m+[m[32m        if not has_digit:[m
+[32m+[m[32m            print('digit')[m
+[32m+[m[32m        if not has_special:[m
+[32m+[m[32m            print('special')[m
+\ No newline at end of file[m
+[1mdiff --git a/perfect_number.py b/perfect_number.py[m
+[1mindex e69de29..79389ec 100644[m
+[1m--- a/perfect_number.py[m
+[1m+++ b/perfect_number.py[m
+[36m@@ -0,0 +1,12 @@[m
+[32m+[m[32mn = int(input('enter: '))[m
+[32m+[m[32msum = 0[m
+[32m+[m[32ml = [][m
+[32m+[m[32mfor i in range(1, n):[m
+[32m+[m[32m    if n % i == 0:[m
+[32m+[m[32m        sum += i[m
+[32m+[m[32m        l.append(i)[m
+[32m+[m[32mif n == sum:[m
+[32m+[m[32m    print('perfect number')[m
+[32m+[m[32m    print('list is : ', *l)[m
+[32m+[m[32melse:[m
+[32m+[m[32m    print('not perfect number')[m
+\ No newline at end of file[m
+[1mdiff --git a/permutation.py b/permutation.py[m
+[1mindex e69de29..622b5f4 100644[m
+[1m--- a/permutation.py[m
+[1m+++ b/permutation.py[m
+[36m@@ -0,0 +1,32 @@[m
+[32m+[m[32m'''''Exercise 8: Given an integer n, write a program to generate all permutations of 1, 2, ..., n[m
+[32m+[m[32min lexicographic order (elements of a permutation are separated by a SPACE character).[m
+[32m+[m[32mExample[m
+[32m+[m[32mInput[m
+[32m+[m[32m3[m
+[32m+[m[32mOutput[m
+[32m+[m[32m1 2 3[m
+[32m+[m[32m1 3 2[m
+[32m+[m[32m2 1 3[m
+[32m+[m[32m2 3 1[m
+[32m+[m[32m3 1 2[m
+[32m+[m[32m3 2 1[m
+[32m+[m[32m'''[m
+[32m+[m[32mdef generate_permutations(n):[m
+[32m+[m[32m    def backtrack(path, used):[m
+[32m+[m[32m        if len(path) == n:[m
+[32m+[m[32m            print(' '.join(map(str, path)))[m
+[32m+[m[32m            return[m
+[32m+[m[32m        for i in range(1, n + 1):[m
+[32m+[m[32m            if not used[i]:[m
+[32m+[m[32m                used[i] = True[m
+[32m+[m[32m                path.append(i)[m
+[32m+[m[32m                backtrack(path, used)[m
+[32m+[m[32m                path.pop()[m
+[32m+[m[32m                used[i] = False[m
+[32m+[m
+[32m+[m[32m    used = [False] * (n + 1)[m
+[32m+[m[32m    backtrack([], used)[m
+[32m+[m
+[32m+[m[32m# Example usage:[m
+[32m+[m[32mn = int(input("Enter a number: "))[m
+[32m+[m[32mgenerate_permutations(n)[m
+[1mdiff --git a/permutation_khoa.py b/permutation_khoa.py[m
+[1mindex e69de29..67225bc 100644[m
+[1m--- a/permutation_khoa.py[m
+[1m+++ b/permutation_khoa.py[m
+[36m@@ -0,0 +1,7 @@[m
+[32m+[m[32mn = int(input())[m
+[32m+[m[32m    def merge(currentset,n):[m
+[32m+[m[32m        for s in currentset:[m
+[32m+[m
+[32m+[m[32m            for i in range(len(s)):[m
+[32m+[m[32m                s.append(s[i])[m
+[32m+[m[32m                s[i]=n[m
+[1mdiff --git a/prime.py b/prime.py[m
+[1mindex e69de29..c69878f 100644[m
+[1m--- a/prime.py[m
+[1m+++ b/prime.py[m
+[36m@@ -0,0 +1,26 @@[m
+[32m+[m[32ml = list(map(int,input().split()))[m
+[32m+[m[32msum = 0[m
+[32m+[m[32mcount = 0[m
+[32m+[m[32mdef prime(n):[m
+[32m+[m[32m    if n == 1:[m
+[32m+[m[32m        return 0[m
+[32m+[m[32m    else:[m
+[32m+[m
+[32m+[m[32m        while True:[m
+[32m+[m[32m            for i in range(2, n):[m
+[32m+[m[32m                if n % i == 0:[m
+[32m+[m[32m                    return 0[m
+[32m+[m
+[32m+[m[32m            break[m
+[32m+[m[32m        return n[m
+[32m+[m[32mfor i in l:[m
+[32m+[m[32m    t = prime(i)[m
+[32m+[m[32m    if t > 1:[m
+[32m+[m[32m        sum += t[m
+[32m+[m[32m        count += 1[m
+[32m+[m[32mprint(sum/count)[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/prime_factors.py b/prime_factors.py[m
+[1mindex e69de29..fa51f44 100644[m
+[1m--- a/prime_factors.py[m
+[1m+++ b/prime_factors.py[m
+[36m@@ -0,0 +1,57 @@[m
+[32m+[m[32mdef prime(n):[m
+[32m+[m[32m    if n == 1:[m
+[32m+[m[32m        return False[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        r = True[m
+[32m+[m[32m        while r:[m
+[32m+[m[32m            for i in range(2, n):[m
+[32m+[m[32m                if n % i == 0:[m
+[32m+[m[32m                    return False[m
+[32m+[m
+[32m+[m[32m            break[m
+[32m+[m[32m        return True[m
+[32m+[m
+[32m+[m[32mdef factors(n):[m
+[32m+[m[32m    factors = {}[m
+[32m+[m[32m    power = 0[m
+[32m+[m[32m    for i in range(2, n):[m
+[32m+[m[32m        if prime(i) == True and n % i == 0:[m
+[32m+[m[32m            for k in range(1,n):[m
+[32m+[m[32m                if n % (i**k) == 0:[m
+[32m+[m[32m                    power += 1[m
+[32m+[m[32m            factors[i] = power[m
+[32m+[m[32m            power = 0[m
+[32m+[m[32m    return factors[m
+[32m+[m[32mdict_1 = factors(50)[m
+[32m+[m[32mdef prime_format(fact_dict):[m
+[32m+[m[32m    return ' * '.join(f'{prime}^{power}' for prime, power in fact_dict.items())[m
+[32m+[m[32mprint(prime_format(dict_1))[m
+[32m+[m[32mdict_2 = factors(75)[m
+[32m+[m[32mprint(prime_format(dict_2))[m
+[32m+[m
+[32m+[m[32mgcd = {}[m
+[32m+[m[32mfor i in dict_1:[m
+[32m+[m[32m    if i in dict_2:[m
+[32m+[m[32m        gcd[i] = min(dict_1[i], dict_2[i])[m
+[32m+[m[32ma = 1[m
+[32m+[m[32mfor p in gcd:[m
+[32m+[m[32m    a *= p**gcd[p][m
+[32m+[m[32mprint(a)[m
+[32m+[m
+[32m+[m[32mfor i in dict_2:[m
+[32m+[m[32m    if i in dict_1:[m
+[32m+[m[32m        dict_1[i] = max(dict_1[i], dict_2[i])[m
+[32m+[m[32m    else:[m
+[32m+[m[32m        dict_1[i] = dict_2[i][m
+[32m+[m
+[32m+[m[32mt = 1[m
+[32m+[m[32mfor i in dict_1:[m
+[32m+[m[32m    t *= i**dict_1[i][m
+[32m+[m[32mprint(t)[m
+[32m+[m
+[32m+[m[32mgcd_dict = {}[m
+[32m+[m[32mfor p in dict_1:[m
+[32m+[m[32m    if p in dict_2:[m
+[32m+[m[32m        gcd_dict[p] = min(dict_1[p], dict_2[p])[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/python_quiz.py b/python_quiz.py[m
+[1mindex e69de29..f33e665 100644[m
+[1m--- a/python_quiz.py[m
+[1m+++ b/python_quiz.py[m
+[36m@@ -0,0 +1,3 @@[m
+[32m+[m[32msampleSet = {"Yellow", "Orange", "Black"}[m
+[32m+[m[32msampleSet.update(["Yellow", "Green", "Red"])[m
+[32m+[m[32mprint(sampleSet)[m
+[1mdiff --git a/sort_student.py b/sort_student.py[m
+[1mindex e69de29..694395c 100644[m
+[1m--- a/sort_student.py[m
+[1m+++ b/sort_student.py[m
+[36m@@ -0,0 +1,9 @@[m
+[32m+[m[32mnames = [][m
+[32m+[m[32mfor i in range(10):[m
+[32m+[m[32m    n = input('enter a name: ')[m
+[32m+[m[32m    names.append(n)[m
+[32m+[m[32mnames.sort()[m
+[32m+[m[32mn = 1[m
+[32m+[m[32mfor name in names:[m
+[32m+[m[32m    print(name + '-' + f'student {n}')[m
+[32m+[m[32m    n += 1[m
+\ No newline at end of file[m
+[1mdiff --git a/substring.py b/substring.py[m
+[1mindex e69de29..7a8fad3 100644[m
+[1m--- a/substring.py[m
+[1m+++ b/substring.py[m
+[36m@@ -0,0 +1,17 @@[m
+[32m+[m[32msentence = input('enter a sentence: ').lower().split()[m
+[32m+[m[32ms = ' '.join(sentence)[m
+[32m+[m[32m#Hello world ! Welcome to the world . The world greets you[m
+[32m+[m
+[32m+[m
+[32m+[m[32mword = input('enter a word: ').lower()[m
+[32m+[m[32ma = sentence.count(word)[m
+[32m+[m
+[32m+[m[32mb = s.find(word)[m
+[32m+[m
+[32m+[m[32mif a > 0:[m
+[32m+[m[32m    print(f"'{word}' firstly occurs at position {b}, number of occurrences {a}")[m
+[32m+[m[32melse:[m
+[32m+[m[32m    print(f"'{word} does not occur in the sentence.'")[m
+[32m+[m
+[32m+[m
+[32m+[m
+[1mdiff --git a/substring_count.py b/substring_count.py[m
+[1mindex e69de29..4d51315 100644[m
+[1m--- a/substring_count.py[m
+[1m+++ b/substring_count.py[m
+[36m@@ -0,0 +1,13 @@[m
+[32m+[m[32mn = list(input())[m
+[32m+[m[32m''' Given a string str, we are interested in its substrings that have the same first and last character.[m
+[32m+[m[32m Write a function substrings_count(str) to count the number of such substrings.[m
+[32m+[m[32mExample:[m
+[32m+[m[32mInput:  abcab[m
+[32m+[m[32mOutput: 7[m
+[32m+[m[32m'''[m
+[32m+[m[32ma = 0[m
+[32m+[m[32mfor i,t in enumerate(n):[m
+[32m+[m[32m    for j,s in enumerate(n):[m
+[32m+[m[32m        if t == s and j>=i:[m
+[32m+[m[32m            a += 1[m
+[32m+[m[32mprint(a)[m
+\ No newline at end of file[m
+[1mdiff --git a/test.py b/test.py[m
+[1mindex e69de29..95c3f07 100644[m
+[1m--- a/test.py[m
+[1m+++ b/test.py[m
+[36m@@ -0,0 +1,2 @@[m
+[32m+[m[32mzot = 'abc'[m
+[32m+[m[32mprint(zot[5])[m
+\ No newline at end of file[m
+[1mdiff --git a/test_this.py b/test_this.py[m
+[1mindex e69de29..b451831 100644[m
+[1m--- a/test_this.py[m
+[1m+++ b/test_this.py[m
+[36m@@ -0,0 +1,18 @@[m
+[32m+[m[32mimport pygame[m
+[32m+[m[32mimport random[m
+[32m+[m[32mfrom multiprocessing import Process[m
+[32m+[m[32mimport time[m
+[32m+[m
+[32m+[m[32mpygame.init()[m
+[32m+[m
+[32m+[m[32mWIDTH, HEIGHT = 600, 700[m
+[32m+[m
+[32m+[m[32mscreen = pygame.display.set_mode((WIDTH, HEIGHT))[m
+[32m+[m[32mpygame.display.set_caption('Magic Ball')[m
+[32m+[m
+[32m+[m[32mBLACK = (0, 0, 0)[m
+[32m+[m[32mWHITE = (255, 255, 255)[m
+[32m+[m[32mCOLOR = (100, 100, 200)[m
+[32m+[m[32mYELLOW = (255, 255, 0)[m
+[32m+[m[32mBROWN = (55, 55, 55)[m
+[32m+[m[32mclock = pygame.time.Clock()[m
+\ No newline at end of file[m
+[1mdiff --git a/upper_first_letter.py b/upper_first_letter.py[m
+[1mindex e69de29..f106a34 100644[m
+[1m--- a/upper_first_letter.py[m
+[1m+++ b/upper_first_letter.py[m
+[36m@@ -0,0 +1,3 @@[m
+[32m+[m[32msentence = input('Enter sentence: ').lower().split()[m
+[32m+[m[32mnew = ' '.join(sentence)[m
+[32m+[m[32mprint(new.title())[m
+[1mdiff --git a/word_count_literally.py b/word_count_literally.py[m
+[1mindex e69de29..8754cd9 100644[m
+[1m--- a/word_count_literally.py[m
+[1m+++ b/word_count_literally.py[m
+[36m@@ -0,0 +1,6 @@[m
+[32m+[m[32msentence = input('enter a sentence: ').lower().split()[m
+[32m+[m[32mdict = {}[m
+[32m+[m[32mfor word in sentence:[m
+[32m+[m[32m    dict[word] = dict.get(word, 0) + 1[m
+[32m+[m[32mfor key, value in dict.items():[m
+[32m+[m[32m    print(key + ': ' + str(value))[m

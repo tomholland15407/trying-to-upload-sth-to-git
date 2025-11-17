@@ -1,2 +1,1 @@
-l = [1,2,4]
-print(l.index(4))
+gcd = lambda a,b: a if b == 0 else gcd(b,a%b)
