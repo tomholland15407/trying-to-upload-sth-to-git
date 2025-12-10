@@ -1,10 +1,7 @@
-def fib_fast(n, d):
+def fibfast(n, d = {1:0, 2:1}):
     if n in d:
         return d[n]
-    else:
-        ans = fib_fast(n-1, d) + fib_fast(n-2, d)
-        d[n] = ans
-        print(n, ans)
-    return ans
-d = {1:1, 2:2}
-print(fib_fast(4, d))
+    d[n] = fibfast(n-1, d) + fibfast(n-2, d)
+    return d[n]
+
+print(fibfast(5))

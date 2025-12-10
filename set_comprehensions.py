@@ -1,0 +1,7 @@
+a = set('abcdabcde')
+print(a)
+b = set('abcdabcdeferg')
+print(a|b)
+print(a&b)
+print(a-b)
+print(a^b)

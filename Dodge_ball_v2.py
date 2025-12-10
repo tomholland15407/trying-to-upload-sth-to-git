@@ -1,11 +1,3 @@
-#Add a short intro like this
-# "Year 2125."
-  #  "Climate change has ravaged the planet.",
-   # "Toxic waste rains from the sky — a deadly storm of pollution.",
-    #"But humanity still craves one thing: pizza.",
-    #"You are the last delivery driver.",
-    #"Your mission: dodge the toxic balls and deliver hope... one slice at a time."
-
 import pygame
 import random
 import time
@@ -31,20 +23,13 @@ RED = (150, 0, 0)
 RANDOM = (random.randint(100, 200), random.randint(100, 200), random.randint(100, 200))
 clock = pygame.time.Clock()
 
+font0 = pygame.font.SysFont('comicsans', 30)
 font = pygame.font.SysFont('Arial', 40)
 font1 = pygame.font.SysFont('Arial', 60)
 
-good = ['GOOD', 'AMAZING', 'BEAUTIFUL', 'FANTASTIC', 'WELL DONE', 'BRILLIANT', 'SO COOL', 'LOVELY', 'GOOD JOB', 'EXCELLENT', 'SUPER', 'RIZZ', 'RIZZ MASTER', 'ULTIMATE RIZZ MASTER', '5 STAR', 'LET HIM COOK', 'BREEZE', 'SWEET']
-story_line = ["Year 2125.",
-              "Climate change has ravaged the planet.",
-            "Toxic waste rains from the sky.",
-            "But humanity still craves one thing: pizza.",
-            "You are the last delivery driver.",
-            "Your mission: dodge the toxic balls and deliver hope"
-              "... one slice at a time."]
+good = ['GOOD', 'AMAZING', 'BEAUTIFUL', 'FANTASTIC', 'WELL DONE', 'BRILLIANT', 'SO COOL', 'LOVELY', 'GOOD JOB', 'EXCELLENT', 'SUPER', 'RIZZ', 'RIZZ MASTER', 'ULTIMATE RIZZ MASTER', '5 STARS', 'LET HIM COOK', 'BREEZE', 'SWEET']
 
 def generate_color():
-    colors = []
     r = random.randint(100, 200)
     g = random.randint(100, 200)
     b = random.randint(100, 200)
@@ -69,7 +54,7 @@ def game_loop():
     plus = 2
     score = 0
     cplus = 5
-    cminus = 30
+    cminus = 10
     start_loop = False
     time_start = 0
     time_last = 5000
@@ -92,14 +77,14 @@ def game_loop():
             else:
                 start_loop_2 = False
 
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.MOUSEBUTTONDOWN and cx > 0:
-                cx -= cminus
-            elif event.type == pygame.KEYDOWN and cx > 0 and event.key == pygame.K_SPACE:
-                cx -= cminus
+            # old code: elif event.type == pygame.KEYDOWN and cx > 0 and event.key == pygame.K_SPACE:
+            #     cx -= cminus
+        keys = pygame.key.get_pressed()
+        if (keys[pygame.K_SPACE] or keys[pygame.K_LEFT]) and cx > 0:
+            cx -= cminus
 
         if by < HEIGHT:
             by += plus
@@ -118,7 +103,7 @@ def game_loop():
             plus += 2
             cplus += 1
             cx = 0
-            cminus += 10
+            cminus += 2
             start_loop = True
             time_start = pygame.time.get_ticks()
             compliment[0] = good[random.randint(0, len(good)-1)]
@@ -135,7 +120,7 @@ def game_loop():
             else:
                 start_loop = False
 
-        if abs(bx - (cx + 15)) < 55 and abs(by - (cy + 15)) < 55:
+        if abs(bx - (cx + 15)) < 50 and abs(by - (cy + 15)) < 50:
             running = False
 
         text = font.render(f'Total score: {score}', True, COLOR)
@@ -170,14 +155,55 @@ def scoreboard(score):
         screen.blit(text2, (WIDTH/2 - text2.get_width()/2, HEIGHT/2 - text1.get_height()/2 + 50))
         pygame.display.flip()
         clock.tick(50)
+
+story_line = ["Year 2125",
+              "Climate change has ravaged the planet",
+            "Toxic waste rains from the sky",
+            "But humanity still craves one thing: pizza",
+            "You are the last delivery driver",
+            "Your mission: dodge the toxic balls",
+             "and deliver hope",
+              "... one slice at a time."]
+
+class Line:
+    def __init__(self, content, y=HEIGHT):
+        self.y = y
+        self.content = content
+    def draw(self):
+        text = font0.render(self.content, True, WHITE)
+        screen.blit(text, ((WIDTH//2 - text.get_width()//2), self.y))
+        self.y -= 7
+lines = []
 def story():
-    running = True
-    while running:
+    running2 = True
+    start = pygame.time.get_ticks()
+    n = 0
+    interval = 700
+    next = start + interval
+    while running2:
         screen.fill(BLACK)
+        time_lapsed = pygame.time.get_ticks() - start
+        if time_lapsed > 11000:
+            running2 = False
+        if pygame.time.get_ticks() > next and n < len(story_line):
+            content = story_line[n]
+            lines.append(Line(content))
+            n += 1
+            next += interval
+        for line in lines:
+            line.draw()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                running2 = False
+        pygame.display.flip()
+        clock.tick(20)
 
+if __name__ == '__main__':
+    story()
+    while True:
+        star = game_loop()
+        time.sleep(0.5)
+        scoreboard(star)
 
-k = 0
-while True:
-    star = game_loop()
-    time.sleep(0.5)
-    scoreboard(star)
