@@ -1,6 +1,8 @@
 import pygame
 import random
 import time
+import os
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
 
@@ -23,9 +25,9 @@ RED = (150, 0, 0)
 RANDOM = (random.randint(100, 200), random.randint(100, 200), random.randint(100, 200))
 clock = pygame.time.Clock()
 
-font0 = pygame.font.SysFont('comicsans', 30)
-font = pygame.font.SysFont('Arial', 40)
-font1 = pygame.font.SysFont('Arial', 60)
+font0 = pygame.font.SysFont('Segoe UI Emoji', 30)
+font = pygame.font.SysFont('Segoe UI Emoji', 20)
+font1 = pygame.font.SysFont('Segoe UI Emoji', 50)
 
 good = ['GOOD', 'AMAZING', 'BEAUTIFUL', 'FANTASTIC', 'WELL DONE', 'BRILLIANT', 'SO COOL', 'LOVELY', 'GOOD JOB', 'EXCELLENT', 'SUPER', 'RIZZ', 'RIZZ MASTER', 'ULTIMATE RIZZ MASTER', '5 STARS', 'LET HIM COOK', 'BREEZE', 'SWEET']
 
@@ -47,6 +49,7 @@ def draw_car(x, y):
     pygame.draw.rect(screen, RED, (x, y, 30, 30))
 
 def game_loop():
+    milestones =  [2,3,5,8]
     by = 0
     bx = WIDTH / 2
     cx = 0
@@ -58,7 +61,6 @@ def game_loop():
     start_loop = False
     time_start = 0
     time_last = 5000
-    start_loop_2 = False
     time_start_2 = pygame.time.get_ticks()
     time_last_2 = 4100
     tx = WIDTH
@@ -66,22 +68,17 @@ def game_loop():
 
     while running:
         screen.fill(WHITE)
-        start_loop_2 = True
-        if start_loop_2:
-            current_time_2 = pygame.time.get_ticks()
-            if current_time_2 - time_start_2 < time_last_2:
-                text3 = font.render('SPACE to dodge the ball', True, GREY)
-                screen.blit(text3, (WIDTH/2-text3.get_width()/2, HEIGHT/2-text3.get_height()/2-30))
-                text4 = font.render('Go full path to score', True, GREY)
-                screen.blit(text4, (WIDTH/2-text4.get_width()/2, HEIGHT/2-text3.get_height()/2+30))
-            else:
-                start_loop_2 = False
+        current_time_2 = pygame.time.get_ticks()
+        if current_time_2 - time_start_2 < time_last_2:
+            text3 = font.render('SPACE to dodge the ball', True, GREY)
+            screen.blit(text3, (WIDTH/2-text3.get_width()/2, HEIGHT/2-text3.get_height()/2-30))
+            text4 = font.render('Go full path to score', True, GREY)
+            screen.blit(text4, (WIDTH/2-text4.get_width()/2, HEIGHT/2-text3.get_height()/2+30))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            # old code: elif event.type == pygame.KEYDOWN and cx > 0 and event.key == pygame.K_SPACE:
-            #     cx -= cminus
+
         keys = pygame.key.get_pressed()
         if (keys[pygame.K_SPACE] or keys[pygame.K_LEFT]) and cx > 0:
             cx -= cminus
@@ -99,11 +96,12 @@ def game_loop():
             cx += cplus
 
         else:
-            score += 10
-            plus += 2
-            cplus += 1
+            score += 1
             cx = 0
-            cminus += 2
+            if score in milestones or score % 5 == 0:
+                plus += 2
+                cplus += 1
+                cminus += 2
             start_loop = True
             time_start = pygame.time.get_ticks()
             compliment[0] = good[random.randint(0, len(good)-1)]
@@ -116,19 +114,15 @@ def game_loop():
                     tx -= 5
                 else:
                     tx = WIDTH
-
             else:
                 start_loop = False
 
         if abs(bx - (cx + 15)) < 50 and abs(by - (cy + 15)) < 50:
             running = False
 
-        text = font.render(f'Total score: {score}', True, COLOR)
-
+        text = font.render(f'Pizzas delivered: {score} 🍕', True, COLOR)
         screen.blit(text, (WIDTH/2 - text.get_width()/2, 50))
-
         pygame.draw.line(screen, BLUE, (0, HEIGHT-5), (WIDTH, HEIGHT-5), 10)
-
         draw_ball(bx, by)
         draw_car(cx, cy)
         pygame.display.flip()
@@ -145,11 +139,11 @@ def scoreboard(score):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 running1 = False
 
         text1 = font1.render(f'You earned {score}$', True, WHITE)
-        text2 = font.render(f'Click HERE or SPACE to play again', True, WHITE)
+        text2 = font.render(f'SPACE to play again', True, WHITE)
 
         screen.blit(text1, (WIDTH/2 - text1.get_width()/2, HEIGHT/2 - text1.get_height()/2 - 50))
         screen.blit(text2, (WIDTH/2 - text2.get_width()/2, HEIGHT/2 - text1.get_height()/2 + 50))
@@ -195,7 +189,7 @@ def story():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 running2 = False
         pygame.display.flip()
         clock.tick(20)
