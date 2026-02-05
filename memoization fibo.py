@@ -4,4 +4,7 @@ def fibfast(n, d = {1:0, 2:1}):
     d[n] = fibfast(n-1, d) + fibfast(n-2, d)
     return d[n]
 
-print(fibfast(5))
+list = []
+for i in range(1,100):
+    list.append(fibfast(i))
+print(list)

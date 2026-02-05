@@ -2,6 +2,7 @@ import pygame
 import random
 import time
 import os
+import copy
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 pygame.init()
@@ -17,12 +18,10 @@ time_last = 1500
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 COLOR = (100, 100, 200)
-YELLOW = (255, 255, 0)
 BROWN = (55, 55, 55)
 BLUE = (0, 0, 150)
 GREY = (100, 100, 100)
 RED = (150, 0, 0)
-RANDOM = (random.randint(100, 200), random.randint(100, 200), random.randint(100, 200))
 clock = pygame.time.Clock()
 
 font0 = pygame.font.SysFont('Segoe UI Emoji', 30)
@@ -44,25 +43,39 @@ compliment = ['hello']
 def draw_ball(x, y):
     pygame.draw.circle(screen, main_colors, (x, y), 50)
 
+def fibo(n, memo = None):
+    if memo is None:
+        memo = {0:2, 1:3}
+    if n in memo:
+        return memo[n]
+    else:
+        memo[n] = fibo(n-1, memo) + fibo(n-2, memo)
+    return memo[n]
 
 def draw_car(x, y):
     pygame.draw.rect(screen, RED, (x, y, 30, 30))
 
+score_list = [0]
+
 def game_loop():
-    milestones =  [2,3,5,8]
+    peak = max(score_list) * 10
+    milestones = []
+    for i in range(9):
+        milestones.append(fibo(i))
     by = 0
     bx = WIDTH / 2
     cx = 0
     cy = HEIGHT - 30
-    plus = 2
+    plus = 0.05
     score = 0
-    cplus = 5
-    cminus = 10
+    cplus = 0.1
+    cminus = 0.25
     start_loop = False
     time_start = 0
     time_last = 5000
     time_start_2 = pygame.time.get_ticks()
     time_last_2 = 4100
+    start_reverse = False
     tx = WIDTH
     running = True
 
@@ -71,9 +84,9 @@ def game_loop():
         current_time_2 = pygame.time.get_ticks()
         if current_time_2 - time_start_2 < time_last_2:
             text3 = font.render('SPACE to dodge the ball', True, GREY)
-            screen.blit(text3, (WIDTH/2-text3.get_width()/2, HEIGHT/2-text3.get_height()/2-30))
+            screen.blit(text3, (WIDTH/2-text3.get_width()/2, HEIGHT/2-text3.get_height()/2-20))
             text4 = font.render('Go full path to score', True, GREY)
-            screen.blit(text4, (WIDTH/2-text4.get_width()/2, HEIGHT/2-text3.get_height()/2+30))
+            screen.blit(text4, (WIDTH/2-text4.get_width()/2, HEIGHT/2-text3.get_height()/2+20))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -98,20 +111,32 @@ def game_loop():
         else:
             score += 1
             cx = 0
-            if score in milestones or score % 5 == 0:
-                plus += 2
-                cplus += 1
-                cminus += 2
+            if score in milestones or (score-15) % 20 == 0 and score > 90:
+                plus += 0.06
+                cplus += 0.03
+                cminus += 0.05
+            elif score % 10 == 0 and score > 0:
+                start_reverse = True
+                start_time = pygame.time.get_ticks()
+                duration = 2000 + 250 * (score // 10 - 1)
+                pace = copy.copy([plus])
             start_loop = True
             time_start = pygame.time.get_ticks()
-            compliment[0] = good[random.randint(0, len(good)-1)]
+            compliment[0] = '🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕🍕'  if score % 10 == 0 else good[random.randint(0, len(good)-1)]
+        if start_reverse:
+            lapsed_time = pygame.time.get_ticks()
+            if lapsed_time - start_time < duration:
+                plus -= 0.0002
+            else:
+                plus = pace[0] + 0.02
+                start_reverse = False
         if start_loop:
             current_time = pygame.time.get_ticks()
             if current_time - time_start < time_last:
                 text2 = font.render(*compliment, True, BROWN)
-                screen.blit(text2, (tx,100))
+                screen.blit(text2, (tx,120))
                 if (0-text2.get_width()) < tx <= WIDTH:
-                    tx -= 5
+                    tx -= 0.1
                 else:
                     tx = WIDTH
             else:
@@ -119,18 +144,24 @@ def game_loop():
 
         if abs(bx - (cx + 15)) < 50 and abs(by - (cy + 15)) < 50:
             running = False
-
+        highest_score = font.render(f'BREAK YOUR LIMITER: {peak if peak >= score * 10 else score * 10}$', True, COLOR)
+        screen.blit(highest_score, (WIDTH/2 - highest_score.get_width()/2, 35))
         text = font.render(f'Pizzas delivered: {score} 🍕', True, COLOR)
-        screen.blit(text, (WIDTH/2 - text.get_width()/2, 50))
+        screen.blit(text, (WIDTH/2 - text.get_width()/2, 70))
         pygame.draw.line(screen, BLUE, (0, HEIGHT-5), (WIDTH, HEIGHT-5), 10)
         draw_ball(bx, by)
         draw_car(cx, cy)
         pygame.display.flip()
-        clock.tick(50)
+        clock.tick(2000)
+    score_list.append(score)
     return score
 
 def scoreboard(score):
     running1 = True
+    if score >= max(score_list):
+        with open('highest_score_ever.txt', 'w') as f:
+            f.write(str(score))
+    limit = score if score >= max(score_list) else max(score_list)
     score *= 10
     while running1:
         screen.fill(BLACK)
@@ -144,11 +175,13 @@ def scoreboard(score):
 
         text1 = font1.render(f'You earned {score}$', True, WHITE)
         text2 = font.render(f'SPACE to play again', True, WHITE)
+        text5 = font.render(f'YOUR LIMITER: {limit * 10}$', True, WHITE)
 
         screen.blit(text1, (WIDTH/2 - text1.get_width()/2, HEIGHT/2 - text1.get_height()/2 - 50))
-        screen.blit(text2, (WIDTH/2 - text2.get_width()/2, HEIGHT/2 - text1.get_height()/2 + 50))
+        screen.blit(text2, (WIDTH/2 - text2.get_width()/2, HEIGHT/2 - text1.get_height()/2 + 100))
+        screen.blit(text5, (WIDTH/2 - text5.get_width()/2, HEIGHT/2 - text1.get_height()/2 + 50))
         pygame.display.flip()
-        clock.tick(50)
+        clock.tick(60)
 
 story_line = ["Year 2125",
               "Climate change has ravaged the planet",
@@ -166,18 +199,18 @@ class Line:
     def draw(self):
         text = font0.render(self.content, True, WHITE)
         screen.blit(text, ((WIDTH//2 - text.get_width()//2), self.y))
-        self.y -= 7
+        self.y -= 0.1
 lines = []
 def story():
     running2 = True
     start = pygame.time.get_ticks()
     n = 0
-    interval = 700
+    interval = 500
     next = start + interval
     while running2:
         screen.fill(BLACK)
         time_lapsed = pygame.time.get_ticks() - start
-        if time_lapsed > 11000:
+        if time_lapsed > 7000:
             running2 = False
         if pygame.time.get_ticks() > next and n < len(story_line):
             content = story_line[n]
@@ -192,12 +225,16 @@ def story():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 running2 = False
         pygame.display.flip()
-        clock.tick(20)
+        clock.tick(1400)
 
 if __name__ == '__main__':
+    try:
+        with open('highest_score_ever.txt', 'r') as f:
+            score_list.append(int(f.read()))
+    except FileNotFoundError:
+        pass
     story()
     while True:
         star = game_loop()
         time.sleep(0.5)
         scoreboard(star)
-

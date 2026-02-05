@@ -19,5 +19,7 @@ class DataPreprocessing():
 dp = DataPreprocessing()
 dp.read_from_csv()
 dp.set_attributes_and_output()
+print(dp.dataframe.info())
+print(dp.dataframe['X2 house age'])
 print('First house\'s age:', dp.X[0][1])
 print('House price/unit are:', dp.y[0])

@@ -36,11 +36,11 @@ class DataPreprocessing():
         return X_train, X_test, y_train, y_test
 
 
-dp = DataPreprocessing()
-dp.read_from_csv()
-dp.set_attributes_and_output()
-X_train, X_test, y_train, y_test = dp.final_train_test_data(attributes_list=[2,4,5], test_size=0.2)
-print('Shape of X_train: ', X_train.shape)
-print('Shape of y_train: ', y_train.shape)
-print('Shape of X_test: ', X_test.shape)
-print('Shape of y_test: ', y_test.shape)
+# dp = DataPreprocessing()
+# dp.read_from_csv()
+# dp.set_attributes_and_output()
+# X_train, X_test, y_train, y_test = dp.final_train_test_data(attributes_list=[2,4,5], test_size=0.2)
+# print('Shape of X_train: ', X_train.shape)
+# print('Shape of y_train: ', y_train.shape)
+# print('Shape of X_test: ', X_test.shape)
+# print('Shape of y_test: ', y_test.shape)

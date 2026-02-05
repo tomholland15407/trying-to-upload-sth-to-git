@@ -7,10 +7,14 @@ class Figure:
 
 class Rectangle(Figure):
     def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        if self.width <= 0 or self.height <= 0:
-            raise LengthException
+        try:
+            if width > 0 and height > 0:
+                self.width = width
+                self.height = height
+            else:
+                raise LengthException
+        except LengthException as e:
+            print(str(type(e)) + ' was raised')
     def perimeter(self):
         return 2 * (self.width + self.height)
     def area(self):
@@ -21,22 +25,32 @@ class Rectangle(Figure):
         self.height = height
 class Circle(Figure):
     def __init__(self, radius):
-        self.radius = radius
-        if self.radius <= 0:
-            raise LengthException
+        try:
+            if radius > 0:
+                self.radius = radius
+            else:
+                raise LengthException
+        except LengthException as e:
+            print(str(type(e)) + ' was raised')
     def perimeter(self):
         return 2 * math.pi * self.radius
     def area(self):
         return math.pi * self.radius ** 2
 class Triangle(Figure):
     def __init__(self, a, b, c):
-        self.a = a
-        self.b = b
-        self.c = c
-        if self.a <= 0 or self.b <= 0 or self.c <= 0:
-            raise LengthException
-        elif self.a + self.b <= self.c or self.a + self.c <= self.b or self.b + self.c <= self.a:
-            raise InvalidTriangleException
+        try:
+            if a <= 0 or b <= 0 or c <= 0:
+                raise LengthException
+            elif a + b <= c or a + c <= b or b + c <= a:
+                raise InvalidTriangleException
+            else:
+                self.a = a
+                self.b = b
+                self.c = c
+        except LengthException as e:
+            print(str(type(e)) + ' was raised')
+        except InvalidTriangleException as e:
+            print(str(type(e)) + ' was raised')
     def perimeter(self):
         return self.a + self.b + self.c
     def area(self):
@@ -56,11 +70,8 @@ class InvalidTriangleException(Exception):
 
 
 if __name__ == '__main__':
-    width, height = input('Enter width and height: ').split()
-    width, height = int(width), int(height)
-    try:
-        rect = Rectangle(width,height)
-        print(rect.perimeter())
-        print(rect.area())
-    except LengthException as e:
-        print(e.__class__.__name__, 'was raised')
+    rec = Rectangle(-1, 2)
+    tri = Triangle(3, 4,7)
+
+
+

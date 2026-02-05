@@ -67,3 +67,4 @@ for bill in range(1, bill_number+1):
 bills.sort(key=lambda bill: bill.total, reverse=True)
 for b in bills:
     print(b)
+    print()
